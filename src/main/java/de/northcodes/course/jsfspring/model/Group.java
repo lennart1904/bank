@@ -42,7 +42,7 @@ public final class Group extends AbstractEntity implements Serializable {
     private List<User> members;
 
     // Protected no-arg constructor for JPA
-    protected Group() {}
+    publicoup() {}
 
     // Public constructor for initializing a Group instance
     public Group(String title, String topic, String description, String location, User owner) {

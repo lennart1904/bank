@@ -24,4 +24,5 @@ public interface GroupService {
     List<Group> getGroupsOwnedByUser(User owner);
 
     List<Group> getGroupsForMember(User member);
+    
 }
