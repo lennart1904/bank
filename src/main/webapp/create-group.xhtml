@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<ui:composition template="/templates/page-template.xhtml">
+    <f:metadata>
+        <f:viewAction action="#{groupDetails.onload}"/>
+        <f:viewParam name="groupID" value="#{groupDetails.groupID}"/>
+    </f:metadata>
+    <ui:param name="pageTitle" value="Create New Group"/>
+    <ui:define name="panel-top">
+        <section>
+            <h1>Create a New Group</h1>
+            <p>Fill in the details below to create a new group.</p>
+            <p><h:outputLink value="allgroups.xhtml">Back to All Groups</h:outputLink></p>
+        </section>
+    </ui:define>
+    <ui:define name="panel-main">
+        <section>
+            <h:messages styleClass="validation-messages"/>
+            <h:form>
+                <h:panelGrid columns="2" styleClass="form-grid" columnClasses="form-column-label,form-column-input">
+                    
+                    <!-- Title -->
+                    <h:outputLabel for="title" value="Title" />
+                    <h:inputText id="title" 
+                                 value="#{groupDetails.group.title}" 
+                                 size="30"
+                                 required="true" 
+                                 requiredMessage="Please enter a title."
+                                 validatorMessage="Title must be between 1 and 50 characters.">
+                        <f:validateLength minimum="1" maximum="50"/>
+                    </h:inputText>
+
+                    <!-- Topic -->
+                    <h:outputLabel for="topic" value="Topic" />
+                    <h:inputText id="topic" 
+                                 value="#{groupDetails.group.topic}" 
+                                 size="30"
+                                 required="true" 
+                                 requiredMessage="Please enter a topic."
+                                 validatorMessage="Topic must be between 1 and 30 characters.">
+                        <f:validateLength minimum="1" maximum="30"/>
+                    </h:inputText>
+
+                    <!-- Description -->
+                    <h:outputLabel for="description" value="Description" />
+                    <h:inputTextarea id="description" 
+                                     value="#{groupDetails.group.description}" 
+                                     cols="50" rows="5"
+                                     required="true"
+                                     requiredMessage="Please enter a description."
+                                     validatorMessage="Description must be between 10 and 200 characters.">
+                        <f:validateLength minimum="10" maximum="200"/>
+                    </h:inputTextarea>
+
+                    <!-- Location -->
+                    <h:outputLabel for="location" value="Location" />
+                    <h:inputText id="location" 
+                                 value="#{groupDetails.group.location}" 
+                                 size="30"
+                                 required="true"
+                                 requiredMessage="Please enter a location."
+                                 validatorMessage="Location must be between 1 and 50 characters.">
+                        <f:validateLength minimum="1" maximum="50"/>
+                    </h:inputText>
+
+                    <!-- Submit Button -->
+                    <h:outputText value=""/>
+                    <h:commandButton value="Create Group" action="#{groupDetails.submit}" />
+                </h:panelGrid>
+            </h:form>
+        </section>
+    </ui:define>
+</ui:composition>
+</html>

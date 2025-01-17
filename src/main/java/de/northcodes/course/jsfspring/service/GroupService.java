@@ -24,6 +24,4 @@ public interface GroupService {
     List<Group> getGroupsOwnedByUser(User owner);
 
     List<Group> getGroupsForMember(User member);
-
-    List<Group> findByMembersContaining(User member);
 }

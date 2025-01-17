@@ -74,13 +74,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<Group> getGroupsForMember(User member) {
-    return groupRepository.findByMembersContaining(member);
+        return groupRepository.findByMembersContaining(member);
     }
-
-    @Override
-    public List<Group> findByMembersContaining(User member) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByMembersContaining'");
-    }
-
+    
 }
