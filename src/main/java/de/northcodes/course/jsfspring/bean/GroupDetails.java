@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import de.northcodes.course.jsfspring.model.Group;
 import de.northcodes.course.jsfspring.service.GroupService;
+import de.northcodes.course.jsfspring.bean.UserManager;
 
 import java.io.Serializable;
 
@@ -22,6 +23,9 @@ public class GroupDetails implements Serializable {
 
     @Autowired
     private GroupService groupService;
+
+    @Autowired
+    private UserManager userManager;
 
     private Group group;
 
@@ -44,16 +48,27 @@ public class GroupDetails implements Serializable {
     }
 
     public void onload() {
+        if (!userManager.isSignedIn()) {
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "You must be signed in to create a group.", null));
+            return;
+        }
+    
         if (groupId == 0) {
-            // New Group Creation
-            group = new Group();
+            // New group creation with the current user as owner
+            group = new Group("", "", "", "", userManager.getCurrentUser());
         } else {
             // Load existing group from the service
             group = groupService.getGroupById(groupId);
         }
     }
+    
 
     public String submit() {
+        if (group.getOwner() == null) {
+            group.setOwner(userManager.getCurrentUser());
+        }
+    
         if (groupId == 0) {
             groupService.createGroup(
                 group.getTitle(),
@@ -73,7 +88,7 @@ public class GroupDetails implements Serializable {
         }
         return "allgroups.xhtml?faces-redirect=true";
     }
-
+    
     public void validateTitle(FacesContext context, Object value) {
         String title = (String) value;
         if (title == null || title.trim().isEmpty() || title.length() > 50) {
