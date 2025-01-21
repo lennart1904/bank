@@ -49,11 +49,11 @@ public class GroupDetails implements Serializable {
 
     public void onload() {
         if (!userManager.isSignedIn()) {
-            FacesContext.getCurrentInstance().addMessage(null, 
+            FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "You must be signed in to create a group.", null));
             return;
         }
-    
+
         if (groupId == 0) {
             // New group creation with the current user as owner
             group = new Group("", "", "", "", userManager.getCurrentUser());
@@ -62,13 +62,13 @@ public class GroupDetails implements Serializable {
             group = groupService.getGroupById(groupId);
         }
     }
-    
+
 
     public String submit() {
         if (group.getOwner() == null) {
             group.setOwner(userManager.getCurrentUser());
         }
-    
+
         if (groupId == 0) {
             groupService.createGroup(
                 group.getTitle(),
@@ -88,7 +88,7 @@ public class GroupDetails implements Serializable {
         }
         return "allgroups.xhtml?faces-redirect=true";
     }
-    
+
     public void validateTitle(FacesContext context, Object value) {
         String title = (String) value;
         if (title == null || title.trim().isEmpty() || title.length() > 50) {
