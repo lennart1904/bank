@@ -35,9 +35,9 @@ public final class Group extends AbstractEntity implements Serializable {
 
     @ManyToMany
     @JoinTable(
-        name = AbstractEntity.SHOP_PREFIX + "group_members",
-        joinColumns = @JoinColumn(name = "group_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id")
+            name = AbstractEntity.SHOP_PREFIX + "group_members",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> members;
 
@@ -102,6 +102,11 @@ public final class Group extends AbstractEntity implements Serializable {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    // New setter for owner
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     // Add member to the group
