@@ -66,7 +66,7 @@ public class GroupDetails implements Serializable {
             if (group == null) {
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group not found.", null));
-                group = new Group(); // Fallback, um NullPointer zu vermeiden
+                        group = new Group("", "", "", "", userManager.getCurrentUser());
             }
         }
     }
