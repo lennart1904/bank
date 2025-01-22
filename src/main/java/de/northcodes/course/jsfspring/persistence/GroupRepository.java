@@ -2,16 +2,28 @@ package de.northcodes.course.jsfspring.persistence;
 
 import java.util.List;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import de.northcodes.course.jsfspring.model.Group;
 import de.northcodes.course.jsfspring.model.User;
 
-public interface GroupRepository extends CrudRepository<Group, Long> {
+@Repository
+public interface GroupRepository extends JpaRepository<Group, Long> {
 
-    // Retrieve all groups owned by a specific user
+    /**
+     * Findet alle Gruppen, die von einem bestimmten Benutzer erstellt wurden.
+     *
+     * @param owner der Benutzer, der die Gruppen erstellt hat
+     * @return eine Liste von Gruppen
+     */
     List<Group> findByOwner(User owner);
 
-    // Retrieve groups where a specific user is a member
+    /**
+     * Findet alle Gruppen, in denen ein bestimmter Benutzer Mitglied ist.
+     *
+     * @param member der Benutzer, der Mitglied ist
+     * @return eine Liste von Gruppen
+     */
     List<Group> findByMembersContaining(User member);
 }

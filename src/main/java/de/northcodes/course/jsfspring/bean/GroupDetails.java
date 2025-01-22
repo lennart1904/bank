@@ -28,9 +28,9 @@ public class GroupDetails implements Serializable {
     private UserManager userManager;
 
     private Group group;
-
     private long groupId;
 
+    // Getter und Setter
     public Group getGroup() {
         return group;
     }
@@ -47,48 +47,69 @@ public class GroupDetails implements Serializable {
         this.groupId = groupId;
     }
 
+    /**
+     * Wird beim Laden der Seite aufgerufen, um die Gruppe zu initialisieren.
+     */
     public void onload() {
         if (!userManager.isSignedIn()) {
             FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, "You must be signed in to create a group.", null));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "You must be signed in to create or edit a group.", null));
             return;
         }
 
         if (groupId == 0) {
-            // New group creation with the current user as owner
+            // Neue Gruppe erstellen
             group = new Group("", "", "", "", userManager.getCurrentUser());
         } else {
-            // Load existing group from the service
+            // Existierende Gruppe laden
             group = groupService.getGroupById(groupId);
+            if (group == null) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group not found.", null));
+                group = new Group(); // Fallback, um NullPointer zu vermeiden
+            }
         }
     }
 
-
+    /**
+     * Speichert oder aktualisiert die Gruppe und navigiert zurück zur Übersicht.
+     */
     public String submit() {
-        if (group.getOwner() == null) {
-            group.setOwner(userManager.getCurrentUser());
-        }
+        try {
+            if (groupId == 0) {
+                // Neue Gruppe erstellen
+                group.setOwner(userManager.getCurrentUser());
+                groupService.createGroup(
+                        group.getTitle(),
+                        group.getTopic(),
+                        group.getDescription(),
+                        group.getLocation(),
+                        group.getOwner()
+                );
+            } else {
+                // Bestehende Gruppe aktualisieren
+                groupService.updateGroup(
+                        group.getId(),
+                        group.getTitle(),
+                        group.getTopic(),
+                        group.getDescription(),
+                        group.getLocation()
+                );
+            }
 
-        if (groupId == 0) {
-            groupService.createGroup(
-                group.getTitle(),
-                group.getTopic(),
-                group.getDescription(),
-                group.getLocation(),
-                group.getOwner()
-            );
-        } else {
-            groupService.updateGroup(
-                group.getId(),
-                group.getTitle(),
-                group.getTopic(),
-                group.getDescription(),
-                group.getLocation()
-            );
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Group saved successfully.", null));
+            return "allgroups.xhtml?faces-redirect=true"; // Redirect zur Übersicht
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error saving group: " + e.getMessage(), null));
+            return null; // Auf der gleichen Seite bleiben
         }
-        return "allgroups.xhtml?faces-redirect=true";
     }
 
+    /**
+     * Validiert den Titel der Gruppe.
+     */
     public void validateTitle(FacesContext context, Object value) {
         String title = (String) value;
         if (title == null || title.trim().isEmpty() || title.length() > 50) {
@@ -96,6 +117,9 @@ public class GroupDetails implements Serializable {
         }
     }
 
+    /**
+     * Validiert den Ort der Gruppe.
+     */
     public void validateLocation(FacesContext context, Object value) {
         String location = (String) value;
         if (location == null || location.trim().isEmpty() || location.length() > 50) {

@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import de.northcodes.course.jsfspring.model.Group;
 import de.northcodes.course.jsfspring.model.User;
 import de.northcodes.course.jsfspring.persistence.GroupRepository;
 
 @Service
+@Transactional
 public class GroupServiceImpl implements GroupService {
 
     @Autowired
@@ -17,65 +19,89 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Group createGroup(String title, String topic, String description, String location, User owner) {
-        Group group = new Group(title, topic, description, location, owner);
-        return groupRepository.save(group);
-    }
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be null or empty.");
+        }
 
+        Group group = new Group(title, topic, description, location, owner);
+        Group savedGroup = groupRepository.save(group);
+        System.out.println("Group created: " + savedGroup);
+        return savedGroup;
+    }
 
     @Override
     public List<Group> getAllGroups() {
-        return (List<Group>) groupRepository.findAll();
+        List<Group> groups = (List<Group>) groupRepository.findAll();
+        System.out.println("Fetched all groups: " + groups.size() + " groups found.");
+        return groups;
     }
 
     @Override
     public Group getGroupById(Long id) {
-        return groupRepository.findById(id).orElse(null);
+        return groupRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("Group not found with ID: " + id));
     }
 
     @Override
     public Group updateGroup(Long groupId, String title, String topic, String description, String location) {
-        Group group = groupRepository.findById(groupId).orElse(null);
-        if (group != null) {
+        Group group = groupRepository.findById(groupId).orElseThrow(() ->
+                new IllegalArgumentException("Group not found with ID: " + groupId));
+
+        if (title != null && !title.trim().isEmpty()) {
             group.setTitle(title);
-            group.setTopic(topic);
-            group.setDescription(description);
-            group.setLocation(location);
-            return groupRepository.save(group);
         }
-        return null;
+        if (topic != null && !topic.trim().isEmpty()) {
+            group.setTopic(topic);
+        }
+        if (description != null && !description.trim().isEmpty()) {
+            group.setDescription(description);
+        }
+        if (location != null && !location.trim().isEmpty()) {
+            group.setLocation(location);
+        }
+
+        Group updatedGroup = groupRepository.save(group);
+        System.out.println("Group updated: " + updatedGroup);
+        return updatedGroup;
     }
 
     @Override
     public void deleteGroup(Long id) {
+        groupRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("Group not found with ID: " + id));
         groupRepository.deleteById(id);
+        System.out.println("Group deleted with ID: " + id);
     }
 
     @Override
     public void addMember(Long groupId, User user) {
-        Group group = groupRepository.findById(groupId).orElse(null);
-        if (group != null) {
-            group.addMember(user);
-            groupRepository.save(group);
-        }
+        Group group = groupRepository.findById(groupId).orElseThrow(() ->
+                new IllegalArgumentException("Group not found with ID: " + groupId));
+        group.addMember(user);
+        groupRepository.save(group);
+        System.out.println("Member added to group: " + group);
     }
 
     @Override
     public void removeMember(Long groupId, User user) {
-        Group group = groupRepository.findById(groupId).orElse(null);
-        if (group != null) {
-            group.removeMember(user);
-            groupRepository.save(group);
-        }
+        Group group = groupRepository.findById(groupId).orElseThrow(() ->
+                new IllegalArgumentException("Group not found with ID: " + groupId));
+        group.removeMember(user);
+        groupRepository.save(group);
+        System.out.println("Member removed from group: " + group);
     }
 
     @Override
     public List<Group> getGroupsOwnedByUser(User owner) {
-        return groupRepository.findByOwner(owner);
+        List<Group> groups = groupRepository.findByOwner(owner);
+        System.out.println("Groups owned by user: " + owner.getUsername() + ", count: " + groups.size());
+        return groups;
     }
 
     @Override
     public List<Group> getGroupsForMember(User member) {
-        return groupRepository.findByMembersContaining(member);
+        List<Group> groups = groupRepository.findByMembersContaining(member);
+        System.out.println("Groups for member: " + member.getUsername() + ", count: " + groups.size());
+        return groups;
     }
-    
 }

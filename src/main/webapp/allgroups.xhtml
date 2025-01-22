@@ -3,15 +3,22 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
 <h:head>
     <title>All Groups</title>
 </h:head>
 <h:body>
     <h1>Groups</h1>
+    <!-- Link zur Seite create-group.xhtml -->
     <h:link value="Create New Group" outcome="create-group" />
 
+    <h:commandButton value="Refresh Groups" action="#{groupList.refreshGroups}">
+        <f:ajax render="@form" />
+    </h:commandButton>
+
+    <!-- Liste der Gruppen -->
     <ul>
-        <ui:repeat value="#{popularGroups.groups}" var="group">
+        <ui:repeat value="#{groupList.groups}" var="group">
             <li>
                 <h3><h:outputText value="#{group.title}" /></h3>
                 <p><h:outputText value="#{group.shortDescription}" /></p>
@@ -23,3 +30,4 @@
     </ul>
 </h:body>
 </html>
+
