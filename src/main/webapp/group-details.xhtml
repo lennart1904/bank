@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Group Details</title>
+</h:head>
+<f:metadata>
+    <f:viewParam name="groupId" value="#{groupDetails.groupId}" />
+    <f:viewAction action="#{groupDetails.onload}" />
+</f:metadata>
+
+<h:body>
+    <h:form>
+        <h1>Group Details</h1>
+
+        <!-- Display Group Information -->
+        <h:panelGrid columns="2">
+            <h:outputLabel for="title" value="Title:" />
+            <h:outputText id="title" value="#{groupDetails.group.title}" />
+
+            <h:outputLabel for="topic" value="Topic:" />
+            <h:outputText id="topic" value="#{groupDetails.group.topic}" />
+
+            <h:outputLabel for="description" value="Description:" />
+            <h:outputText id="description" value="#{groupDetails.group.description}" />
+
+            <h:outputLabel for="location" value="Location:" />
+            <h:outputText id="location" value="#{groupDetails.group.location}" />
+
+            <h:outputLabel for="owner" value="Owner:" />
+            <h:outputText id="owner" value="#{groupDetails.group.owner.username}" />
+        </h:panelGrid>
+
+        <br />
+        <h:commandButton value="Back to All Groups" action="allgroups.xhtml?faces-redirect=true" />
+    </h:form>
+</h:body>
+</html>
