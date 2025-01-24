@@ -6,24 +6,28 @@ server:
         faces:
           forceLoadConfiguration: true
 
-
-### H2 ###"
+### H2 ###
 spring:
   datasource:
-    url: jdbc:h2:mem:productdb
+    url: jdbc:h2:file:./data/productdb # Persistente Datenbank in Datei, ohne /data/ speeichern sich Usern nicht
     username: sa
     password: password
-    driverClassName: org.h2.Driver
+    driver-class-name: org.h2.Driver
+
   jpa:
-    spring:
-      jpa.database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update # Behalte bestehendes Schema und Daten
     properties:
       hibernate:
-        show_sql: true
-        use_sql_comments: true
-        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+        show_sql: true      # SQL-Statements anzeigen
+        use_sql_comments: true # Kommentare zu SQL-Befehlen anzeigen
+        format_sql: true    # SQL-Statements formatiert ausgeben
+
   h2:
-    console.enabled: true
+    console:
+      enabled: true # Aktiviert H2-Konsole
+      path: /h2-console # Standardpfad zur Konsole
 
 logging:
   level:

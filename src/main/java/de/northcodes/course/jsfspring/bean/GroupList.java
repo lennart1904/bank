@@ -27,4 +27,10 @@ public class GroupList implements Serializable {
         }
         return groups;
     }
+
+    // Methode, um die Gruppenliste zu aktualisieren
+    public void refreshGroups() {
+        groups = groupService.getAllGroups(); // Aktuelle Gruppenliste neu laden
+        System.out.println("Groups refreshed: " + groups.size()); // Debug-Log
+    }
 }
