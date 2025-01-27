@@ -6,28 +6,54 @@
 
 <h:head>
     <title>All Groups</title>
+    <!-- Google Maps JavaScript API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&amp;callback=initMap" async="true"></script>
 </h:head>
+
 <h:body>
-    <h1>Groups</h1>
+
+    <!-- Include the page-header template -->
+    <ui:include src="/templates/page-header.xhtml" />
+
+    <h1>All Groups</h1>
+
+    <!-- Home Button, der zur sign-in.xhtml weiterleitet -->
+    <h:form>
+        <h:commandButton value="Home" action="sign-in.xhtml?faces-redirect=true" />
+    </h:form>
+
     <!-- Link zur Seite create-group.xhtml -->
     <h:link value="Create New Group" outcome="create-group" />
 
-    <h:commandButton value="Refresh Groups" action="#{groupList.refreshGroups}">
-        <f:ajax render="@form" />
-    </h:commandButton>
+    <!-- Button zum Aktualisieren der Gruppenliste -->
+    <h:form>
+        <h:commandButton value="Refresh Groups" action="#{groupList.refreshGroups}">
+            <f:ajax render="@form" />
+        </h:commandButton>
+    </h:form>
 
     <!-- Liste der Gruppen -->
     <ul>
         <ui:repeat value="#{groupList.groups}" var="group">
             <li>
+                <!-- Gruppentitel -->
                 <h3><h:outputText value="#{group.title}" /></h3>
+                <!-- Kurze Beschreibung -->
                 <p><h:outputText value="#{group.shortDescription}" /></p>
+
+                <!-- Link zur Detailseite -->
                 <h:link value="View Details" outcome="group-details">
                     <f:param name="id" value="#{group.id}" />
                 </h:link>
+
+                <!-- Google Maps Link -->
+                <h:outputLink value="https://www.google.com/maps?q=#{group.location}" target="_blank">
+                    View on Google Maps
+                </h:outputLink>
             </li>
         </ui:repeat>
     </ul>
+    <!-- Include the page-footer template -->
+    <ui:include src="/templates/page-footer.xhtml" />
 </h:body>
 </html>
-

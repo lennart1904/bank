@@ -1,6 +1,7 @@
 package de.northcodes.course.jsfspring.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -39,10 +40,10 @@ public final class Group extends AbstractEntity implements Serializable {
             joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<User> members;
+    private List<User> members = new ArrayList<>(); // Initialisierung der Liste
 
-    // Protected no-arg constructor for JPA
-    protected Group() {}
+    // Public no-arg constructor for JPA and external access
+    public Group() {}
 
     // Public constructor for initializing a Group instance
     public Group(String title, String topic, String description, String location, User owner) {
@@ -104,7 +105,6 @@ public final class Group extends AbstractEntity implements Serializable {
         this.location = location;
     }
 
-    // New setter for owner
     public void setOwner(User owner) {
         this.owner = owner;
     }

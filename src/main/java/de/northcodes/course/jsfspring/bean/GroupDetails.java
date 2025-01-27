@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import de.northcodes.course.jsfspring.model.Group;
 import de.northcodes.course.jsfspring.service.GroupService;
-import de.northcodes.course.jsfspring.bean.UserManager;
 
 import java.io.Serializable;
 
@@ -24,11 +23,8 @@ public class GroupDetails implements Serializable {
     @Autowired
     private GroupService groupService;
 
-    @Autowired
-    private UserManager userManager;
-
     private Group group;
-    private long groupId;
+    private Long groupId;
 
     // Getter und Setter
     public Group getGroup() {
@@ -39,11 +35,11 @@ public class GroupDetails implements Serializable {
         this.group = group;
     }
 
-    public long getGroupId() {
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(long groupId) {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 
@@ -51,91 +47,55 @@ public class GroupDetails implements Serializable {
      * Wird beim Laden der Seite aufgerufen, um die Gruppe zu initialisieren.
      */
     public void onload() {
-        if (!userManager.isSignedIn()) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "You must be signed in to create or edit a group.", null));
-            return;
-        }
-
-        if (groupId == 0) {
-            // Neue Gruppe erstellen
-            group = new Group("", "", "", "", userManager.getCurrentUser());
-        } else {
-            // Existierende Gruppe laden
+        if (groupId != null && groupId > 0) {
+            // Lade die existierende Gruppe basierend auf der ID
             group = groupService.getGroupById(groupId);
             if (group == null) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Group not found.", null));
-                        group = new Group("", "", "", "", userManager.getCurrentUser());
-            }
-        }
-    }
-
-    /**
- * Speichert oder aktualisiert die Gruppe und navigiert zur Detailansicht oder zur Übersicht.
- */
-public String submit() {
-    try {
-        if (groupId == 0) {
-            // Neue Gruppe erstellen
-            group.setOwner(userManager.getCurrentUser());
-            Group createdGroup = groupService.createGroup(
-                    group.getTitle(),
-                    group.getTopic(),
-                    group.getDescription(),
-                    group.getLocation(),
-                    group.getOwner()
-            );
-
-            // Sicherstellen, dass die erstellte Gruppe eine gültige ID hat
-            if (createdGroup != null && createdGroup.getId() != null) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Group created successfully.", null));
-                return "group-details.xhtml?faces-redirect=true&groupId=" + createdGroup.getId();
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Failed to create the group.", null));
-                return null;
+                addMessage(FacesMessage.SEVERITY_ERROR, "Group not found. Please check the ID.");
             }
         } else {
-            // Bestehende Gruppe aktualisieren
-            groupService.updateGroup(
-                    group.getId(),
-                    group.getTitle(),
-                    group.getTopic(),
-                    group.getDescription(),
-                    group.getLocation()
-            );
-
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Group updated successfully.", null));
-            return "group-details.xhtml?faces-redirect=true&groupId=" + group.getId();
-        }
-    } catch (Exception e) {
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error saving group: " + e.getMessage(), null));
-        return null; // Bleibt auf der aktuellen Seite bei Fehler
-    }
-}
-
-
-    /**
-     * Validiert den Titel der Gruppe.
-     */
-    public void validateTitle(FacesContext context, Object value) {
-        String title = (String) value;
-        if (title == null || title.trim().isEmpty() || title.length() > 50) {
-            throw new javax.faces.validator.ValidatorException(new FacesMessage("Title must be between 1 and 50 characters."));
+            // Keine ID vorhanden: Neue Gruppe initialisieren
+            group = new Group();
         }
     }
 
     /**
-     * Validiert den Ort der Gruppe.
+     * Speichert oder aktualisiert die Gruppe und navigiert zurück zur Übersicht.
      */
-    public void validateLocation(FacesContext context, Object value) {
-        String location = (String) value;
-        if (location == null || location.trim().isEmpty() || location.length() > 50) {
-            throw new javax.faces.validator.ValidatorException(new FacesMessage("Location must be between 1 and 50 characters."));
+    public String submit() {
+        try {
+            if (groupId == null || groupId == 0) {
+                // Neue Gruppe erstellen
+                groupService.createGroup(
+                        group.getTitle(),
+                        group.getTopic(),
+                        group.getDescription(),
+                        group.getLocation(),
+                        group.getOwner()
+                );
+                addMessage(FacesMessage.SEVERITY_INFO, "Group created successfully.");
+            } else {
+                // Bestehende Gruppe aktualisieren
+                groupService.updateGroup(
+                        group.getId(),
+                        group.getTitle(),
+                        group.getTopic(),
+                        group.getDescription(),
+                        group.getLocation()
+                );
+                addMessage(FacesMessage.SEVERITY_INFO, "Group updated successfully.");
+            }
+            return "allgroups.xhtml?faces-redirect=true"; // Redirect zur Übersicht
+        } catch (Exception e) {
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error saving group: " + e.getMessage());
+            return null; // Bleibt auf der gleichen Seite
         }
+    }
+
+    /**
+     * Fügt eine Nachricht zum FacesContext hinzu.
+     */
+    private void addMessage(FacesMessage.Severity severity, String detail) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, detail, null));
     }
 }

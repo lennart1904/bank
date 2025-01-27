@@ -17,7 +17,8 @@
                 <h:form>
                     <h1>Welcome, #{userManager.currentUser.firstName}!</h1>
                     <p>You are already signed in.
-                        Do you want to<h:commandLink action="#{userManager.signOut}">sign out</h:commandLink>?</p>
+                        Do you want to <h:commandLink action="#{userManager.signOut}">sign out</h:commandLink>?</p>
+                    <p><h:outputLink value="allgroups.xhtml">Go to All Groups</h:outputLink></p>
                 </h:form>
             </ui:fragment>
 
@@ -41,7 +42,7 @@
                                        required="true" requiredMessage="Please enter your password."/>
 
                         <h:outputText value=""/>
-                        <h:commandButton value="Submit" action="#{signIn.submit}"/>
+                        <h:commandButton value="Submit" action="#{signIn.submit}" />
                     </h:panelGrid>
                 </h:form>
             </section>
