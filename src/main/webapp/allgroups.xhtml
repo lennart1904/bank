@@ -19,20 +19,19 @@
 
     <!-- Home Button, der zur sign-in.xhtml weiterleitet -->
     <h:form>
-        <h:commandButton value="Home" action="sign-in.xhtml?faces-redirect=true" />
+        <h:commandButton value="🏠 Home" action="sign-in.xhtml?faces-redirect=true" />
     </h:form>
+
     <br />
     <!-- Link zur Seite create-group.xhtml -->
-    <h:link value="Create New Group" outcome="create-group" />
+    <h:commandButton value="+ Create New Group" outcome="create-group" />
     <br />
     <br />
         <!-- Button zum Aktualisieren der Gruppenliste -->
     <h:form>
-        <h:commandButton value="Refresh Groups" action="#{groupList.refreshGroups}">
-            <f:ajax render="@form" />
-        </h:commandButton>
 
     </h:form>
+
 
     <!-- Liste der Gruppen -->
     <ul>
@@ -51,6 +50,11 @@
             </li>
         </ui:repeat>
     </ul>
+<br/>
+    <h:commandButton value="🔄 Refresh Groups" action="#{groupList.refreshGroups}">
+        <f:ajax render="@form" />
+    </h:commandButton>
+
     <!-- Include the page-footer template -->
     <ui:include src="/templates/page-footer.xhtml" />
 </h:body>
