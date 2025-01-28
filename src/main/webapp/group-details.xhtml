@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
 <h:head>
     <title>Group Details</title>
@@ -15,12 +16,29 @@
     <p>Topic: <h:outputText value="#{groupDetails.group.topic}" /></p>
     <p>Description: <h:outputText value="#{groupDetails.group.description}" /></p>
     <p>Location: <h:outputText value="#{groupDetails.group.location}" /></p>
-    <p>Owner: <h:outputText value="#{groupDetails.group.owner.username}" /></p>
+    <p>Owner: <h:outputText value="#{groupDetails.group.owner.firstName} #{groupDetails.group.owner.lastName}" /></p>
 
     <!-- Google Maps Link -->
     <h:outputLink value="https://www.google.com/maps?q=#{group.location}" target="_blank">
         View on Google Maps
     </h:outputLink>
+
+    <br/>
+    <br/>
+
+    <!-- Button to add current user as a member -->
+    <h:form>
+        <h:commandButton value="Join Group" action="#{groupDetails.addCurrentUserAsMember}" styleClass="btn" />
+    </h:form>
+
+    <br/>
+    <br/>
+
+    <!-- Anzeige der Mitglieder -->
+    <h2>Members</h2>
+    <ui:repeat value="#{groupDetails.group.members}" var="member">
+        <p>#{member.firstName} #{member.lastName}</p>
+    </ui:repeat>
 
     <br/>
     <br/>

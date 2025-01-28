@@ -66,6 +66,18 @@ public class GroupDetails implements Serializable {
         }
     }
 
+    /**
+     * Fügt den aktuellen Benutzer als Mitglied zur Gruppe hinzu.
+     */
+    public void addCurrentUserAsMember() {
+        User currentUser = userManager.getCurrentUser();
+        if (currentUser != null) {
+            groupService.addMember(group.getId(), currentUser);
+            addMessage(FacesMessage.SEVERITY_INFO, "You have successfully joined the group.");
+        } else {
+            addMessage(FacesMessage.SEVERITY_ERROR, "You need to be signed in to join the group.");
+        }
+    }
 
     /**
      * Speichert oder aktualisiert die Gruppe und navigiert zurück zur Übersicht.
