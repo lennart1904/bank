@@ -84,4 +84,12 @@ public interface GroupService {
      * @return eine Liste von Gruppen
      */
     List<Group> getGroupsForMember(User member);
+
+    /**
+     * Fügt den aktuellen Benutzer als Mitglied zu einer Gruppe hinzu.
+     *
+     * @param groupId     die ID der Gruppe
+     * @param currentUser der aktuelle Benutzer, der hinzugefügt wird
+     */
+    void addCurrentUserAsMember(Long groupId, User currentUser);
 }

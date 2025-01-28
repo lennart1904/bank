@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -34,7 +35,7 @@ public final class Group extends AbstractEntity implements Serializable {
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = AbstractEntity.SHOP_PREFIX + "group_members",
             joinColumns = @JoinColumn(name = "group_id"),
@@ -107,6 +108,10 @@ public final class Group extends AbstractEntity implements Serializable {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public void setMembers(List<User> members) {
+        this.members = members;
     }
 
     // Add member to the group

@@ -38,8 +38,11 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Group getGroupById(Long id) {
-        return groupRepository.findById(id).orElseThrow(() ->
+        Group group = groupRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("Group not found with ID: " + id));
+        // Initialize the members collection
+        group.getMembers().size();
+        return group;
     }
 
     @Override
@@ -103,5 +106,14 @@ public class GroupServiceImpl implements GroupService {
         List<Group> groups = groupRepository.findByMembersContaining(member);
         System.out.println("Groups for member: " + member.getUsername() + ", count: " + groups.size());
         return groups;
+    }
+
+    @Override
+    public void addCurrentUserAsMember(Long groupId, User currentUser) {
+        Group group = groupRepository.findById(groupId).orElseThrow(() ->
+                new IllegalArgumentException("Group not found with ID: " + groupId));
+        group.addMember(currentUser);
+        groupRepository.save(group);
+        System.out.println("Member added to group: " + group);
     }
 }

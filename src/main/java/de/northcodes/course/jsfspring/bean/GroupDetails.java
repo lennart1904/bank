@@ -72,7 +72,7 @@ public class GroupDetails implements Serializable {
     public void addCurrentUserAsMember() {
         User currentUser = userManager.getCurrentUser();
         if (currentUser != null) {
-            groupService.addMember(group.getId(), currentUser);
+            groupService.addCurrentUserAsMember(group.getId(), currentUser);
             addMessage(FacesMessage.SEVERITY_INFO, "You have successfully joined the group.");
         } else {
             addMessage(FacesMessage.SEVERITY_ERROR, "You need to be signed in to join the group.");

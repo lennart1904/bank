@@ -40,7 +40,13 @@
     <br/>
 
     <!-- Anzeige der Mitglieder -->
-    
+    <h2>Members</h2>
+    <ui:repeat value="#{groupDetails.group.members}" var="member">
+        <p>#{member.firstName} #{member.lastName}</p>
+    </ui:repeat>
+
+    <br/>
+    <br/>
 
     <!-- Zurück-Link -->
     <h:link value="Back to All Groups" outcome="allgroups" />
