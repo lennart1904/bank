@@ -80,60 +80,6 @@ public class GroupDetails implements Serializable {
     }
 
     /**
-     * Speichert oder aktualisiert die Gruppe und navigiert zurück zur Übersicht.
-     *
-     * @return Die Zielseite (Redirect zu "allgroups.xhtml") oder null bei Fehlern
-     */
-    public String submit() {
-        try {
-            // Besitzer der Gruppe sicherstellen
-            if (group.getOwner() == null) {
-                User currentUser = userManager.getCurrentUser();
-                if (currentUser != null) {
-                    group.setOwner(currentUser);
-                } else {
-                    addMessage(FacesMessage.SEVERITY_ERROR, "Sie müssen angemeldet sein, um eine Gruppe zu erstellen.");
-                    return null; // Bleibt auf der gleichen Seite
-                }
-            }
-
-            // Gruppe validieren
-            try {
-                group.validate(); // Überprüft, ob alle erforderlichen Felder gesetzt sind
-            } catch (IllegalArgumentException e) {
-                addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage());
-                return null; // Bleibt auf der gleichen Seite
-            }
-
-            if (groupId == null || groupId == 0) {
-                // Neue Gruppe erstellen
-                groupService.createGroup(
-                        group.getTitle(),
-                        group.getTopic(),
-                        group.getDescription(),
-                        group.getLocation(),
-                        group.getOwner()
-                );
-                addMessage(FacesMessage.SEVERITY_INFO, "Gruppe erfolgreich erstellt.");
-            } else {
-                // Bestehende Gruppe aktualisieren
-                groupService.updateGroup(
-                        group.getId(),
-                        group.getTitle(),
-                        group.getTopic(),
-                        group.getDescription(),
-                        group.getLocation()
-                );
-                addMessage(FacesMessage.SEVERITY_INFO, "Gruppe erfolgreich aktualisiert.");
-            }
-            return "allgroups.xhtml?faces-redirect=true"; // Weiterleitung zur Gruppenübersicht
-        } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Speichern der Gruppe: " + e.getMessage());
-            return null; // Bleibt auf der gleichen Seite
-        }
-    }
-
-    /**
      * Fügt eine Nachricht zum FacesContext hinzu.
      *
      * @param severity Schweregrad der Nachricht (INFO, WARN, ERROR)

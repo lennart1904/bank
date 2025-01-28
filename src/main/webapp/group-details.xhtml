@@ -9,6 +9,11 @@
 </h:head>
 
 <h:body>
+    <f:metadata>
+        <f:viewParam name="id" value="#{groupDetails.groupId}" />
+        <f:viewAction action="#{groupDetails.onload}" />
+    </f:metadata>
+
     <h1>Group Details</h1>
 
     <!-- Anzeige der Gruppendetails -->
@@ -19,7 +24,7 @@
     <p>Owner: <h:outputText value="#{groupDetails.group.owner.firstName} #{groupDetails.group.owner.lastName}" /></p>
 
     <!-- Google Maps Link -->
-    <h:outputLink value="https://www.google.com/maps?q=#{group.location}" target="_blank">
+    <h:outputLink value="https://www.google.com/maps?q=#{groupDetails.group.location}" target="_blank">
         View on Google Maps
     </h:outputLink>
 
@@ -35,13 +40,7 @@
     <br/>
 
     <!-- Anzeige der Mitglieder -->
-    <h2>Members</h2>
-    <ui:repeat value="#{groupDetails.group.members}" var="member">
-        <p>#{member.firstName} #{member.lastName}</p>
-    </ui:repeat>
-
-    <br/>
-    <br/>
+    
 
     <!-- Zurück-Link -->
     <h:link value="Back to All Groups" outcome="allgroups" />
