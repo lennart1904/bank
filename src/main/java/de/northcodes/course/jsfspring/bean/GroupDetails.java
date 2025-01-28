@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import de.northcodes.course.jsfspring.model.Group;
+import de.northcodes.course.jsfspring.model.User;
 import de.northcodes.course.jsfspring.service.GroupService;
 
 import java.io.Serializable;
@@ -22,6 +23,9 @@ public class GroupDetails implements Serializable {
 
     @Autowired
     private GroupService groupService;
+
+    @Autowired
+    private UserManager userManager; // Für den aktuellen Benutzer
 
     private Group group;
     private Long groupId;
@@ -45,25 +49,50 @@ public class GroupDetails implements Serializable {
 
     /**
      * Wird beim Laden der Seite aufgerufen, um die Gruppe zu initialisieren.
+     * Wenn eine gültige groupId vorhanden ist, wird die entsprechende Gruppe geladen.
+     * Andernfalls wird eine neue Gruppe erstellt.
      */
     public void onload() {
         if (groupId != null && groupId > 0) {
-            // Lade die existierende Gruppe basierend auf der ID
+            // Load an existing group based on the ID
             group = groupService.getGroupById(groupId);
             if (group == null) {
-                addMessage(FacesMessage.SEVERITY_ERROR, "Group not found. Please check the ID.");
+                addMessage(FacesMessage.SEVERITY_ERROR, "Gruppe nicht gefunden. Bitte überprüfen Sie die ID.");
+                group = new Group(); // Fallback to prevent NullPointerException
             }
         } else {
-            // Keine ID vorhanden: Neue Gruppe initialisieren
+            // No ID provided: Initialize a new group
             group = new Group();
         }
     }
 
+
     /**
      * Speichert oder aktualisiert die Gruppe und navigiert zurück zur Übersicht.
+     *
+     * @return Die Zielseite (Redirect zu "allgroups.xhtml") oder null bei Fehlern
      */
     public String submit() {
         try {
+            // Besitzer der Gruppe sicherstellen
+            if (group.getOwner() == null) {
+                User currentUser = userManager.getCurrentUser();
+                if (currentUser != null) {
+                    group.setOwner(currentUser);
+                } else {
+                    addMessage(FacesMessage.SEVERITY_ERROR, "Sie müssen angemeldet sein, um eine Gruppe zu erstellen.");
+                    return null; // Bleibt auf der gleichen Seite
+                }
+            }
+
+            // Gruppe validieren
+            try {
+                group.validate(); // Überprüft, ob alle erforderlichen Felder gesetzt sind
+            } catch (IllegalArgumentException e) {
+                addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage());
+                return null; // Bleibt auf der gleichen Seite
+            }
+
             if (groupId == null || groupId == 0) {
                 // Neue Gruppe erstellen
                 groupService.createGroup(
@@ -73,7 +102,7 @@ public class GroupDetails implements Serializable {
                         group.getLocation(),
                         group.getOwner()
                 );
-                addMessage(FacesMessage.SEVERITY_INFO, "Group created successfully.");
+                addMessage(FacesMessage.SEVERITY_INFO, "Gruppe erfolgreich erstellt.");
             } else {
                 // Bestehende Gruppe aktualisieren
                 groupService.updateGroup(
@@ -83,17 +112,20 @@ public class GroupDetails implements Serializable {
                         group.getDescription(),
                         group.getLocation()
                 );
-                addMessage(FacesMessage.SEVERITY_INFO, "Group updated successfully.");
+                addMessage(FacesMessage.SEVERITY_INFO, "Gruppe erfolgreich aktualisiert.");
             }
-            return "allgroups.xhtml?faces-redirect=true"; // Redirect zur Übersicht
+            return "allgroups.xhtml?faces-redirect=true"; // Weiterleitung zur Gruppenübersicht
         } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error saving group: " + e.getMessage());
+            addMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Speichern der Gruppe: " + e.getMessage());
             return null; // Bleibt auf der gleichen Seite
         }
     }
 
     /**
      * Fügt eine Nachricht zum FacesContext hinzu.
+     *
+     * @param severity Schweregrad der Nachricht (INFO, WARN, ERROR)
+     * @param detail   Detailtext der Nachricht
      */
     private void addMessage(FacesMessage.Severity severity, String detail) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, detail, null));
