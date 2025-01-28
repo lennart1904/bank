@@ -40,7 +40,7 @@ public final class Group extends AbstractEntity implements Serializable {
             joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<User> members = new ArrayList<>(); // Initialisierung der Liste
+    private List<User> members = new ArrayList<>(); // Initialisiert die Liste
 
     // Public no-arg constructor for JPA and external access
     public Group() {}
@@ -119,6 +119,25 @@ public final class Group extends AbstractEntity implements Serializable {
     // Remove member from the group
     public void removeMember(User member) {
         members.remove(member);
+    }
+
+    /**
+     * Validates the state of the Group entity.
+     * Ensures that required fields (like owner) are set.
+     */
+    public void validate() {
+        if (owner == null) {
+            throw new IllegalArgumentException("Owner cannot be null.");
+        }
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be empty.");
+        }
+        if (description == null || description.trim().isEmpty()) {
+            throw new IllegalArgumentException("Description cannot be empty.");
+        }
+        if (location == null || location.trim().isEmpty()) {
+            throw new IllegalArgumentException("Location cannot be empty.");
+        }
     }
 
     @Override
