@@ -17,6 +17,14 @@
     <p>Location: <h:outputText value="#{groupDetails.group.location}" /></p>
     <p>Owner: <h:outputText value="#{groupDetails.group.owner.username}" /></p>
 
+    <!-- Google Maps Link -->
+    <h:outputLink value="https://www.google.com/maps?q=#{group.location}" target="_blank">
+        View on Google Maps
+    </h:outputLink>
+
+    <br/>
+    <br/>
+
     <!-- Zurück-Link -->
     <h:link value="Back to All Groups" outcome="allgroups" />
 </h:body>
