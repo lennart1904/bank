@@ -42,20 +42,20 @@ public class UserManager implements Serializable {
         }
 
         currentUser = user;
-        return "index";
+        return "allgroups";
     }
 
     public String signOut() {
-        // End the session, removing any session state, including the current user and content of the shopping cart
+        // Invalidate the session to remove any session state
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 
-        // Redirect is necessary to let the browser make a new GET request
-        return "index?faces-redirect=true";
+        // Redirect to the sign-in page
+        return "sign-in?faces-redirect=true";
     }
 
     public String save(User user) {
         userService.saveUser(user);
         currentUser = user;
-        return "index";
+        return "allgroups";
     }
 }
