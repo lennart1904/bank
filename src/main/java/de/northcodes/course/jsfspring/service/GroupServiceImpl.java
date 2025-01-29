@@ -113,6 +113,9 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findById(groupId).orElseThrow(() ->
                 new IllegalArgumentException("Group not found with ID: " + groupId));
 
+        // Print the current members of the group
+        System.out.println("Current members of the group: " + group.getMembers());
+
         // Check if the current user is already a member
         if (group.getMembers().contains(currentUser)) {
             throw new IllegalArgumentException("User is already a member of the group.");
