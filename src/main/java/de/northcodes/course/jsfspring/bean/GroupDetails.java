@@ -1,6 +1,7 @@
 package de.northcodes.course.jsfspring.bean;
 
 import javax.annotation.ManagedBean;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -29,6 +30,12 @@ public class GroupDetails implements Serializable {
 
     private Group group;
     private Long groupId;
+
+    @PostConstruct
+    public void init() {
+        // Initialize the group property
+        group = new Group();
+    }
 
     // Getter und Setter
     public Group getGroup() {
@@ -76,6 +83,61 @@ public class GroupDetails implements Serializable {
             addMessage(FacesMessage.SEVERITY_INFO, "You have successfully joined the group.");
         } else {
             addMessage(FacesMessage.SEVERITY_ERROR, "You need to be signed in to join the group.");
+        }
+    }
+
+
+    /**
+     * Speichert oder aktualisiert die Gruppe und navigiert zurück zur Übersicht.
+     *
+     * @return Die Zielseite (Redirect zu "allgroups.xhtml") oder null bei Fehlern
+     */
+    public String submit() {
+        try {
+            // Besitzer der Gruppe sicherstellen
+            if (group.getOwner() == null) {
+                User currentUser = userManager.getCurrentUser();
+                if (currentUser != null) {
+                    group.setOwner(currentUser);
+                } else {
+                    addMessage(FacesMessage.SEVERITY_ERROR, "Sie müssen angemeldet sein, um eine Gruppe zu erstellen.");
+                    return null; // Bleibt auf der gleichen Seite
+                }
+            }
+
+            // Gruppe validieren
+            try {
+                group.validate(); // Überprüft, ob alle erforderlichen Felder gesetzt sind
+            } catch (IllegalArgumentException e) {
+                addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage());
+                return null; // Bleibt auf der gleichen Seite
+            }
+
+            if (groupId == null || groupId == 0) {
+                // Neue Gruppe erstellen
+                groupService.createGroup(
+                        group.getTitle(),
+                        group.getTopic(),
+                        group.getDescription(),
+                        group.getLocation(),
+                        group.getOwner()
+                );
+                addMessage(FacesMessage.SEVERITY_INFO, "Gruppe erfolgreich erstellt.");
+            } else {
+                // Bestehende Gruppe aktualisieren
+                groupService.updateGroup(
+                        group.getId(),
+                        group.getTitle(),
+                        group.getTopic(),
+                        group.getDescription(),
+                        group.getLocation()
+                );
+                addMessage(FacesMessage.SEVERITY_INFO, "Gruppe erfolgreich aktualisiert.");
+            }
+            return "allgroups.xhtml?faces-redirect=true"; // Weiterleitung zur Gruppenübersicht
+        } catch (Exception e) {
+            addMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Speichern der Gruppe: " + e.getMessage());
+            return null; // Bleibt auf der gleichen Seite
         }
     }
 
