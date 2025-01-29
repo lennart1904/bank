@@ -3,52 +3,123 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<ui:composition template="/templates/page-template.xhtml">
+    <ui:param name="pageTitle" value="Group Details"/>
+    <ui:define name="panel-top">
+        <h:head>
+            <title>Group Details</title>
+            <style>
+                /* Stil für den Button */
+                .btn {
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    color: #fff;
+                    background-color: #007BFF;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease;
+                    text-decoration: none;
+                    display: inline-block;
+                    text-align: center;
+                }
+                .back-button {
+                    position: absolute;
+                    top: 10px;
+                    left: 10px;
+                    background-color: #007bff;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    text-decoration: none;
+                }
 
-<h:head>
-    <title>Group Details</title>
-</h:head>
+                .btn:hover {
+                    background-color: #0056b3;
+                }
 
-<h:body>
-    <f:metadata>
-        <f:viewParam name="id" value="#{groupDetails.groupId}" />
-        <f:viewAction action="#{groupDetails.onload}" />
-    </f:metadata>
+                .button-group {
+                    display: flex;
+                    gap: 10px; /* Abstand zwischen Buttons */
+                    margin: 20px 0; /* Abstand nach oben und unten */
+                }
 
-    <h1>Group Details</h1>
 
-    <!-- Anzeige der Gruppendetails -->
-    <h3>Title: <h:outputText value="#{groupDetails.group.title}" /></h3>
-    <p>Topic: <h:outputText value="#{groupDetails.group.topic}" /></p>
-    <p>Description: <h:outputText value="#{groupDetails.group.description}" /></p>
-    <p>Location: <h:outputText value="#{groupDetails.group.location}" /></p>
-    <p>Owner: <h:outputText value="#{groupDetails.group.owner.firstName} #{groupDetails.group.owner.lastName}" /></p>
+                .container {
+                    display: flex;
+                    gap: 20px; /* Abstand zwischen den Abschnitten */
+                }
 
-    <!-- Google Maps Link -->
-    <h:outputLink value="https://www.google.com/maps?q=#{groupDetails.group.location}" target="_blank">
-        View on Google Maps
-    </h:outputLink>
+                section {
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    padding: 16px;
+                    margin: 16px 0;
+                    background-color: #f9f9f9;
+                    width: 100%;
+                }
 
-    <br/>
-    <br/>
+                section h3 {
+                    margin: 0;
+                }
 
-    <!-- Button to add current user as a member -->
-    <h:form>
-        <h:commandButton value="Join Group" action="#{groupDetails.addCurrentUserAsMember}" styleClass="btn" />
-    </h:form>
+                section p, section h3, section a {
+                    margin-bottom: 8px;
+                }
 
-    <br/>
-    <br/>
+                section a {
+                    align-self: flex-start;
+                }
 
-    <!-- Anzeige der Mitglieder -->
-    <h2>Members</h2>
-    <ui:repeat value="#{groupDetails.group.members}" var="member">
-        <p>#{member.firstName} #{member.lastName}</p>
-    </ui:repeat>
+                .back-button {
+                    margin-bottom: 20px;
+                }
+            </style>
+        </h:head>
+    </ui:define>
+    <ui:define name="panel-main">
+        <f:metadata>
+            <f:viewParam name="id" value="#{groupDetails.groupId}" />
+            <f:viewAction action="#{groupDetails.onload}" />
+        </f:metadata>
 
-    <br/>
-    <br/>
+        <!-- Zurück-Link -->
+        <h:link value="Back to All Groups" outcome="allgroups" styleClass="btn back-button" />
 
-    <!-- Zurück-Link -->
-    <h:link value="Back to All Groups" outcome="allgroups" />
-</h:body>
+        <h1>Group Details</h1>
+
+        <div class="container">
+            <!-- Anzeige der Gruppendetails -->
+            <section>
+                <h3>Title: <h:outputText value="#{groupDetails.group.title}" /></h3>
+                <p>Topic: <h:outputText value="#{groupDetails.group.topic}" /></p>
+                <p>Description: <h:outputText value="#{groupDetails.group.description}" /></p>
+                <p>Location: <h:outputText value="#{groupDetails.group.location}" /></p>
+                <p>Owner: <h:outputText value="#{groupDetails.group.owner.firstName} #{groupDetails.group.owner.lastName}" /></p>
+
+                <!-- Google Maps Link -->
+                <h:outputLink value="https://www.google.com/maps?q=#{groupDetails.group.location}" target="_blank" styleClass="btn">
+                    View on Google Maps
+                </h:outputLink>
+
+                <br/>
+                <br/>
+
+                <!-- Button to add current user as a member -->
+                <h:form>
+                    <h:commandButton value="Join Group" action="#{groupDetails.addCurrentUserAsMember}" styleClass="btn" />
+                </h:form>
+            </section>
+
+            <!-- Anzeige der Mitglieder -->
+            <section>
+                <h2>Members</h2>
+                <ui:repeat value="#{groupDetails.group.members}" var="member">
+                    <p>#{member.firstName} #{member.lastName}</p>
+                </ui:repeat>
+            </section>
+        </div>
+    </ui:define>
+</ui:composition>
 </html>
