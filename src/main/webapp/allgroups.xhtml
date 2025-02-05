@@ -47,6 +47,11 @@
                     top: 20px;
                     left: 20px;
                 }
+                .groups-container {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 16px;
+                }
 
                 section {
                     border: 1px solid #ddd;
@@ -101,8 +106,9 @@
             </h:form>
         </div>
         <!-- Sections for groups -->
-        <ui:repeat value="#{groupList.groups}" var="group">
-            <section>
+        <div class="groups-container">
+            <ui:repeat value="#{groupList.groups}" var="group">
+                <section>
                 <!-- Gruppentitel -->
                 <h3><h:outputText value="#{group.title}" /></h3>
                 <!-- Kurze Beschreibung -->
@@ -112,12 +118,9 @@
                     <f:param name="id" value="#{group.id}" />
                     <h:outputText value="View Details" />
                 </h:link>
-                <!-- Google Maps Link -->
-                <h:outputLink value="https://www.google.com/maps?q=#{group.location}" target="_blank" styleClass="btn">
-                    View on Google Maps
-                </h:outputLink>
-            </section>
-        </ui:repeat>
+                </section>
+            </ui:repeat>
+        </div>
     </ui:define>
 </ui:composition>
 </html>

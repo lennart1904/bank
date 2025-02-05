@@ -45,7 +45,6 @@
                     margin: 20px 0; /* Abstand nach oben und unten */
                 }
 
-
                 .container {
                     display: flex;
                     gap: 20px; /* Abstand zwischen den Abschnitten */
@@ -84,8 +83,10 @@
             <f:viewAction action="#{groupDetails.onload}" />
         </f:metadata>
 
-        <!-- Zurück-Link -->
-        <h:link value="Back to All Groups" outcome="allgroups" styleClass="btn back-button" />
+        <!-- Zurück-Button -->
+        <h:form>
+            <h:commandButton value="Back to All Groups" action="allgroups" styleClass="btn back-button" />
+        </h:form>
 
         <h1>Group Details</h1>
 
@@ -98,10 +99,10 @@
                 <p>Location: <h:outputText value="#{groupDetails.group.location}" /></p>
                 <p>Owner: <h:outputText value="#{groupDetails.group.owner.firstName} #{groupDetails.group.owner.lastName}" /></p>
 
-                <!-- Google Maps Link -->
-                <h:outputLink value="https://www.google.com/maps?q=#{groupDetails.group.location}" target="_blank" styleClass="btn">
-                    View on Google Maps
-                </h:outputLink>
+                <!-- Google Maps Button -->
+                <h:form>
+                    <h:commandButton value="View on Google Maps" onclick="window.open('https://www.google.com/maps?q=#{groupDetails.group.location}', '_blank')" styleClass="btn" />
+                </h:form>
 
                 <br/>
                 <br/>
