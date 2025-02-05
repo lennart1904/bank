@@ -38,6 +38,11 @@
                 .btn:hover {
                     background-color: #0056b3;
                 }
+                .refresh-button {
+                    position: absolute;
+                    top: 20px;
+                    right: 20px;
+                }
 
                 .button-group {
                     display: flex;
@@ -120,6 +125,13 @@
                     <p>#{member.firstName} #{member.lastName}</p>
                 </ui:repeat>
             </section>
+        </div>
+        <div class="refresh-button">
+            <h:form>
+                <h:commandButton value="Refresh Groups" action="#{groupList.refreshGroups}" styleClass="btn">
+                    <f:ajax render="@form" />
+                </h:commandButton>
+            </h:form>
         </div>
     </ui:define>
 </ui:composition>

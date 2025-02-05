@@ -7,6 +7,26 @@
 <ui:composition template="/templates/page-template.xhtml">
     <ui:param name="pageTitle" value="Sign In"/>
     <ui:define name="panel-top">
+        <style>
+            .btn {
+                padding: 10px 20px;
+                font-size: 16px;
+                color: #fff !important;
+                background-color: #007BFF;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                text-decoration: none;
+                display: inline-block;
+                text-align: center;
+                margin-right: 20px;
+            }
+            .home-button {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+        </style>
         <section>
             <ui:fragment rendered="#{not userManager.signedIn}">
                 <h1>Sign In</h1>
@@ -42,7 +62,7 @@
                                        required="true" requiredMessage="Please enter your password."/>
 
                         <h:outputText value=""/>
-                        <h:commandButton value="Submit" action="#{signIn.submit}" />
+                        <h:commandButton value="Submit" action="#{signIn.submit}" styleClass="btn" />
                     </h:panelGrid>
                 </h:form>
             </section>

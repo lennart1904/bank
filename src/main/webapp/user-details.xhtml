@@ -11,10 +11,33 @@
     </f:metadata>
     <ui:param name="pageTitle" value="User Details"/>
     <ui:define name="panel-top">
+        <style>
+            .btn {
+                padding: 10px 20px;
+                font-size: 16px;
+                color: #fff !important;
+                background-color: #007BFF;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                text-decoration: none;
+                display: inline-block;
+                text-align: center;
+                margin-right: 20px;
+            }
+            .home-button {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+        </style>
         <section>
-            <h1>Tell us about yourself</h1>
-            <p>Please enter some details about yourself.</p>
-            <p><h:outputLink value="index.xhtml">Back to Popular Products</h:outputLink></p>
+            <h1>Your Details</h1>
+            <p>Please enter your details.</p>
+            <div class="home-button">
+            <h:link value="Back to All Groups" outcome="allgroups" styleClass="btn" >
+            </h:link>
+            </div >
         </section>
     </ui:define>
     <ui:define name="panel-main">

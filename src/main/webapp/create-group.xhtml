@@ -8,12 +8,33 @@
     <f:viewAction action="#{groupDetails.onload}" />
     <ui:param name="pageTitle" value="Create New Group" />
     <ui:define name="panel-top">
+        <style>
+            .btn {
+                padding: 10px 20px;
+                font-size: 16px;
+                color: #fff !important;
+                background-color: #007BFF;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                text-decoration: none;
+                display: inline-block;
+                text-align: center;
+                margin-right: 20px;
+            }
+            .home-button {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+        </style>
         <section>
             <h1>Create a New Group</h1>
             <p>Fill in the details below to create a new group.</p>
-            <p>
-                <h:outputLink value="allgroups.xhtml">Back to All Groups</h:outputLink>
-            </p>
+                <div class="home-button">
+                    <h:link value="Back to All Groups" outcome="allgroups" styleClass="btn" >
+                    </h:link>
+                </div >
         </section>
     </ui:define>
     <ui:define name="panel-main">
@@ -21,7 +42,6 @@
             <f:viewAction action="#{groupDetails.onload}" />
         </f:metadata>
         <section>
-            <h1>Allah</h1>
             <h:messages styleClass="validation-messages" />
 
             <!-- Formular für die Gruppenerstellung -->
@@ -40,7 +60,7 @@
                     <h:inputText id="location" value="#{groupDetails.group.location}" required="true" />
 
                     <!-- Button zum Erstellen der Gruppe -->
-                    <h:commandButton value="Create Group" action="#{groupDetails.submit}" />
+                    <h:commandButton value="Create Group" action="#{groupDetails.submit}" styleClass="btn"/>
                 </h:panelGrid>
             </h:form>
         </section>
