@@ -43,7 +43,6 @@
                     top: 20px;
                     right: 20px;
                 }
-
                 .home-button {
                     position: absolute;
                     top: 20px;
@@ -62,6 +61,8 @@
                     background-color: #f9f9f9;
                     display: inline-block;
                     width: auto;
+                    margin-left: 20px;
+                    margin-right: 20px;
                 }
 
                 section h3 {
@@ -102,13 +103,12 @@
             </h:form>
         </div>
 
-        <h1>All Groups</h1>
+        <h1 style="margin-left: 20px;">All Groups</h1>
         <div class="button-group">
             <!-- Button for "Create New Group" -->
-                <h:link value="Create New Group" outcome="create-group" styleClass="btn" >
-                </h:link>
+                <h:link value="Create New Group" outcome="create-group" style="margin-left: 20px;" styleClass="btn" />
+                </div>
 
-        </div>
         <!-- Sections for groups -->
         <div class="groups-container">
             <ui:repeat value="#{groupList.getGroups()}" var="group">
