@@ -4,6 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <ui:composition template="/templates/page-template.xhtml">
+    <f:event type="preRenderView" listener="#{groupDetails.resetGroup()}" />
     <f:viewAction action="#{groupDetails.onload}" />
     <ui:param name="pageTitle" value="Create New Group" />
     <ui:define name="panel-top">
@@ -16,7 +17,11 @@
         </section>
     </ui:define>
     <ui:define name="panel-main">
+        <f:metadata>
+            <f:viewAction action="#{groupDetails.onload}" />
+        </f:metadata>
         <section>
+            <h1>Allah</h1>
             <h:messages styleClass="validation-messages" />
 
             <!-- Formular für die Gruppenerstellung -->

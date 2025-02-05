@@ -15,7 +15,7 @@
                 .btn {
                     padding: 10px 20px;
                     font-size: 16px;
-                    color: #fff;
+                    color: #fff !important;
                     background-color: #007BFF;
                     border: none;
                     border-radius: 5px;
@@ -24,6 +24,7 @@
                     text-decoration: none;
                     display: inline-block;
                     text-align: center;
+                    text-decoration: ;
                 }
 
                 .btn:hover {
@@ -78,6 +79,9 @@
         </h:head>
     </ui:define>
     <ui:define name="panel-main">
+        <f:metadata>
+            <f:viewAction action="#{groupDetails.onload}" />
+        </f:metadata>
         <div class="home-button">
             <h:form>
                 <ui:fragment rendered="#{not userManager.signedIn}">
@@ -101,13 +105,13 @@
         <h1>All Groups</h1>
         <div class="button-group">
             <!-- Button for "Create New Group" -->
-            <h:form>
-                <h:commandButton value="Create New Group" action="create-group" styleClass="btn" />
-            </h:form>
+                <h:link value="Create New Group" outcome="create-group" styleClass="btn" >
+                </h:link>
+
         </div>
         <!-- Sections for groups -->
         <div class="groups-container">
-            <ui:repeat value="#{groupList.groups}" var="group">
+            <ui:repeat value="#{groupList.getGroups()}" var="group">
                 <section>
                 <!-- Gruppentitel -->
                 <h3><h:outputText value="#{group.title}" /></h3>

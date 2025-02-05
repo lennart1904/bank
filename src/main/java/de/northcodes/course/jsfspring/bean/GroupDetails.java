@@ -3,6 +3,7 @@ package de.northcodes.course.jsfspring.bean;
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 
@@ -14,6 +15,7 @@ import de.northcodes.course.jsfspring.model.User;
 import de.northcodes.course.jsfspring.service.GroupService;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Component
 @ViewScoped
@@ -27,6 +29,7 @@ public class GroupDetails implements Serializable {
 
     @Autowired
     private UserManager userManager; // Für den aktuellen Benutzer
+
 
     private Group group;
     private Long groupId;
@@ -60,6 +63,7 @@ public class GroupDetails implements Serializable {
      * Andernfalls wird eine neue Gruppe erstellt.
      */
     public void onload() {
+        System.out.println(group.getId());
         if (groupId != null && groupId > 0) {
             // Load an existing group based on the ID
             group = groupService.getGroupById(groupId);
@@ -78,12 +82,24 @@ public class GroupDetails implements Serializable {
      */
     public void addCurrentUserAsMember() {
         User currentUser = userManager.getCurrentUser();
-        if (currentUser != null) {
-            groupService.addCurrentUserAsMember(group.getId(), currentUser);
-            addMessage(FacesMessage.SEVERITY_INFO, "You have successfully joined the group.");
-        } else {
+        System.out.println(currentUser.getId());
+        if (currentUser == null) {
             addMessage(FacesMessage.SEVERITY_ERROR, "You need to be signed in to join the group.");
+            return;
         }
+
+        if(groupService.getGroupById(group.getId()).getMembers().stream().anyMatch(m -> Objects.equals(m.getId(), currentUser.getId()))) {
+            System.out.println("Already a member");
+            addMessage(FacesMessage.SEVERITY_ERROR, "You are already a member of this group.");
+            return;
+        }
+        groupService.addCurrentUserAsMember(group.getId(), currentUser);
+        addMessage(FacesMessage.SEVERITY_INFO, "You have successfully joined the group.");
+    }
+
+    public void resetGroup(){
+        System.out.println("Reset group");
+        this.group = new Group();
     }
 
 
@@ -113,27 +129,15 @@ public class GroupDetails implements Serializable {
                 return null; // Bleibt auf der gleichen Seite
             }
 
-            if (groupId == null || groupId == 0) {
-                // Neue Gruppe erstellen
-                groupService.createGroup(
-                        group.getTitle(),
-                        group.getTopic(),
-                        group.getDescription(),
-                        group.getLocation(),
-                        group.getOwner()
-                );
-                addMessage(FacesMessage.SEVERITY_INFO, "Gruppe erfolgreich erstellt.");
-            } else {
-                // Bestehende Gruppe aktualisieren
-                groupService.updateGroup(
-                        group.getId(),
-                        group.getTitle(),
-                        group.getTopic(),
-                        group.getDescription(),
-                        group.getLocation()
-                );
-                addMessage(FacesMessage.SEVERITY_INFO, "Gruppe erfolgreich aktualisiert.");
-            }
+            groupService.createGroup(
+                    group.getTitle(),
+                    group.getTopic(),
+                    group.getDescription(),
+                    group.getLocation(),
+                    group.getOwner()
+            );
+            addMessage(FacesMessage.SEVERITY_INFO, "Gruppe erfolgreich erstellt.");
+
             return "allgroups.xhtml?faces-redirect=true"; // Weiterleitung zur Gruppenübersicht
         } catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, "Fehler beim Speichern der Gruppe: " + e.getMessage());

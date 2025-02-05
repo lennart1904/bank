@@ -20,9 +20,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
-        show_sql: true      # SQL-Statements anzeigen
-        use_sql_comments: true # Kommentare zu SQL-Befehlen anzeigen
-        format_sql: true    # SQL-Statements formatiert ausgeben
+        format_sql: false    # SQL-Statements formatiert ausgeben
 
   h2:
     console:
@@ -31,6 +29,10 @@ spring:
 
 logging:
   level:
+    root: WARN
     org:
-      hibernate:
-        type: trace
+      springframework: WARN
+      hibernate: WARN
+      hibernate.type: OFF
+      hibernate.SQL: OFF
+    javax.faces: WARN

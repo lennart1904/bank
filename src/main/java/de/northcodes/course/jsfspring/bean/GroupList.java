@@ -22,9 +22,7 @@ public class GroupList implements Serializable {
     private List<Group> groups;
 
     public List<Group> getGroups() {
-        if (groups == null) {
-            groups = groupService.getAllGroups(); // Lädt alle Gruppen aus dem Service
-        }
+        groups = groupService.getAllGroups(); // Lädt alle Gruppen aus dem Service
         return groups;
     }
 
