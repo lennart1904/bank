@@ -5,7 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <ui:composition template="/templates/page-template.xhtml">
-    <ui:param name="pageTitle" value="Sign In"/>
+    <ui:param name="pageTitle" value="Sign Out"/>
     <ui:define name="panel-top">
         <style>
             .btn {
@@ -22,27 +22,78 @@
                 text-align: center;
                 margin-right: 20px;
             }
+
+            .btn:hover {
+                background-color: #0056b3;
+            }
+
             .home-button {
                 position: absolute;
                 top: 20px;
                 left: 20px;
+            }
+
+            section {
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 16px;
+                background-color: #f9f9f9;
+                width: 100%;
+                max-width: 1500px;
+                margin: 20px auto;
+                box-sizing: border-box;
+            }
+
+            section h1, section p {
+                margin: 0 0 16px 0;
+            }
+
+            .validation-messages {
+                color: red;
+                margin-bottom: 16px;
+            }
+
+            .form-group {
+                margin-bottom: 16px;
+            }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: bold;
+            }
+
+            .form-group input {
+                width: 100%;
+                padding: 8px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            .button-group {
+                display: flex;
+                gap: 10px;
+                margin: 10px;
+            }
         </style>
         <section>
             <ui:fragment rendered="#{not userManager.signedIn}">
                 <h1>Sign In</h1>
-                <p>Please enter your username.</p>
+                <p>Please enter your username and password to sign in.</p>
             </ui:fragment>
 
             <ui:fragment rendered="#{userManager.signedIn}">
                 <h:form>
                     <h1>Welcome, #{userManager.currentUser.firstName}!</h1>
                     <p>You are already signed in.
-                        Do you want to <h:commandLink action="#{userManager.signOut}">sign out</h:commandLink>?</p>
-                    <p><h:outputLink value="allgroups.xhtml">Go to All Groups</h:outputLink></p>
+                        Do you want to Sign Out?</p>
+                    <div class="button-group">
+                        <h:commandLink action="#{userManager.signOut}" styleClass="btn">Sign Out</h:commandLink>
+                        <h:outputLink value="allgroups.xhtml" styleClass="btn">Back to Group Overview</h:outputLink>
+                    </div>
                 </h:form>
             </ui:fragment>
-
-            <p><h:outputLink value="allgroups.xhtml">Back to Group Overview</h:outputLink></p>
         </section>
     </ui:define>
     <ui:define name="panel-main">
@@ -50,20 +101,23 @@
             <section>
                 <h:messages styleClass="validation-messages"/>
                 <h:form>
-                    <h:panelGrid columns="2" styleClass="form-grid" columnClasses="form-column-label,form-column-input">
-                        <h:outputLabel for="username">Username</h:outputLabel>
+                    <div class="form-group">
+                        <label for="username">Username</label>
                         <h:inputText id="username" value="#{signIn.username}" size="20"
                                      validatorMessage="Please enter a username consisting of only letters and digits, between 2 and 20 characters long.">
                             <f:validateRegex pattern="[A-Za-z0-9]{2,20}"/>
                         </h:inputText>
+                    </div>
 
-                        <h:outputLabel for="password">Password</h:outputLabel>
+                    <div class="form-group">
+                        <label for="password">Password</label>
                         <h:inputSecret id="password" value="#{signIn.password}" size="20"
                                        required="true" requiredMessage="Please enter your password."/>
+                    </div>
 
-                        <h:outputText value=""/>
+                    <div class="form-group">
                         <h:commandButton value="Submit" action="#{signIn.submit}" styleClass="btn" />
-                    </h:panelGrid>
+                    </div>
                 </h:form>
             </section>
         </ui:fragment>

@@ -23,45 +23,99 @@
                 text-align: center;
                 margin-right: 20px;
             }
+
+            .btn:hover {
+                background-color: #0056b3;
+            }
+
             .home-button {
                 position: absolute;
                 top: 20px;
                 left: 20px;
+            }
+
+            section {
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 16px;
+                background-color: #f9f9f9;
+                width: 100%;
+                max-width: 1500px;
+                margin: 20px auto;
+                box-sizing: border-box;
+            }
+
+            section h1, section p {
+                margin: 0 0 16px 0;
+            }
+
+            .validation-messages {
+                color: red;
+                margin-bottom: 16px;
+            }
+
+            .form-group {
+                margin-bottom: 16px;
+            }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: bold;
+            }
+
+            .form-group input, .form-group textarea {
+                width: 100%;
+                padding: 8px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            .form-group textarea {
+                resize: vertical;
+            }
+
+            .form-container {
+                width: 100%;
+            }
         </style>
         <section>
             <h1>Create a New Group</h1>
             <p>Fill in the details below to create a new group.</p>
-                <div class="home-button">
-                    <h:link value="Back to All Groups" outcome="allgroups" styleClass="btn" >
-                    </h:link>
-                </div >
+            <div class="home-button">
+                <h:link value="Back to All Groups" outcome="allgroups" styleClass="btn" />
+            </div>
         </section>
-    </ui:define>
-    <ui:define name="panel-main">
-        <f:metadata>
-            <f:viewAction action="#{groupDetails.onload}" />
-        </f:metadata>
         <section>
             <h:messages styleClass="validation-messages" />
 
             <!-- Formular für die Gruppenerstellung -->
             <h:form>
-                <h:panelGrid columns="2">
-                    <h:outputLabel for="title" value="Title" />
-                    <h:inputText id="title" value="#{groupDetails.group.title}" required="true" />
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <h:inputText id="title" value="#{groupDetails.group.title}" required="true" />
+                    </div>
 
-                    <h:outputLabel for="topic" value="Topic" />
-                    <h:inputText id="topic" value="#{groupDetails.group.topic}" required="true" />
+                    <div class="form-group">
+                        <label for="topic">Topic</label>
+                        <h:inputText id="topic" value="#{groupDetails.group.topic}" required="true" />
+                    </div>
 
-                    <h:outputLabel for="description" value="Description" />
-                    <h:inputTextarea id="description" value="#{groupDetails.group.description}" required="true" />
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <h:inputTextarea id="description" value="#{groupDetails.group.description}" required="true" rows="4" />
+                    </div>
 
-                    <h:outputLabel for="location" value="Location" />
-                    <h:inputText id="location" value="#{groupDetails.group.location}" required="true" />
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <h:inputText id="location" value="#{groupDetails.group.location}" required="true" />
+                    </div>
 
                     <!-- Button zum Erstellen der Gruppe -->
-                    <h:commandButton value="Create Group" action="#{groupDetails.submit}" styleClass="btn"/>
-                </h:panelGrid>
+                    <h:commandButton value="Create Group" action="#{groupDetails.submit}" styleClass="btn" />
+                </div>
             </h:form>
         </section>
     </ui:define>

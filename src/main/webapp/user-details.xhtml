@@ -26,99 +26,168 @@
                 text-align: center;
                 margin-right: 20px;
             }
+
+            .btn:hover {
+                background-color: #0056b3;
+            }
+
             .home-button {
                 position: absolute;
                 top: 20px;
                 left: 20px;
+            }
+
+            section {
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 16px;
+                background-color: #f9f9f9;
+                width: 100%;
+                max-width: 1500px;
+                margin: 20px auto;
+                box-sizing: border-box;
+            }
+
+            section h1, section p {
+                margin: 0 0 16px 0;
+            }
+
+            .validation-messages {
+                color: red;
+                margin-bottom: 16px;
+            }
+
+            .form-group {
+                margin-bottom: 16px;
+            }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: bold;
+            }
+
+            .form-group input, .form-group textarea {
+                width: 100%;
+                padding: 8px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            .form-group textarea {
+                resize: vertical;
+            }
+
+            .form-container {
+                max-width: 600px;
+                margin: 0 auto;
+            }
         </style>
         <section>
             <h1>Your Details</h1>
             <p>Please enter your details.</p>
             <div class="home-button">
-            <h:link value="Back to All Groups" outcome="allgroups" styleClass="btn" >
-            </h:link>
-            </div >
+                <h:link value="Back to All Groups" outcome="allgroups" styleClass="btn" />
+            </div>
         </section>
     </ui:define>
     <ui:define name="panel-main">
         <section>
             <h:messages styleClass="validation-messages"/>
             <h:form>
-                <h:panelGrid columns="2" styleClass="form-grid" columnClasses="form-column-label,form-column-input">
-                    <h:outputLabel for="username">Username</h:outputLabel>
-                    <h:inputText id="username" 
-                    			 value="#{userDetails.user.username}" 
-                    			 size="20"
-                    			 required="true" 
-                    			 requiredMessage="Please enter a username."
-                                 readonly="#{userManager.signedIn}"
-                                 validatorMessage="Please enter a username consisting of only letters and digits, between 2 and 20 characters long.">
-                        <f:validateRegex pattern="[A-Za-z0-9]{2,20}"/>
-                    </h:inputText>
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <h:inputText id="username"
+                                     value="#{userDetails.user.username}"
+                                     size="20"
+                                     required="true"
+                                     requiredMessage="Please enter a username."
+                                     readonly="#{userManager.signedIn}"
+                                     validatorMessage="Please enter a username consisting of only letters and digits, between 2 and 20 characters long.">
+                            <f:validateRegex pattern="[A-Za-z0-9]{2,20}"/>
+                        </h:inputText>
+                    </div>
 
-                    <h:outputLabel for="password">Password</h:outputLabel>
-                    <h:inputSecret id="password" 
-                    			   value="#{userDetails.user.password}" 
-                    			   size="20"
-                                   required="true" 
-                                   requiredMessage="Please enter a password."/>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <h:inputSecret id="password"
+                                       value="#{userDetails.user.password}"
+                                       size="20"
+                                       required="true"
+                                       requiredMessage="Please enter a password."/>
+                    </div>
 
-                    <h:outputLabel for="firstName">First name</h:outputLabel>
-                    <h:inputText id="firstName" 
-                                 value="#{userDetails.user.firstName}" 
-                                 size="30"
-                                 required="true"
-                                 requiredMessage="Please enter your first name."
-                                 validatorMessage="Please enter a first name between 1 and 30 characters long.">
-                        <f:validateLength minimum="1" maximum="30"/>
-                    </h:inputText>
+                    <div class="form-group">
+                        <label for="firstName">First name</label>
+                        <h:inputText id="firstName"
+                                     value="#{userDetails.user.firstName}"
+                                     size="30"
+                                     required="true"
+                                     requiredMessage="Please enter your first name."
+                                     validatorMessage="Please enter a first name between 1 and 30 characters long.">
+                            <f:validateLength minimum="1" maximum="30"/>
+                        </h:inputText>
+                    </div>
 
-                    <h:outputLabel for="lastName">Last name</h:outputLabel>
-                    <h:inputText id="lastName" 
-                                 value="#{userDetails.user.lastName}" 
-                                 size="30"
-                                 required="true" 
-                                 requiredMessage="Please enter your last name."
-                                 validatorMessage="Please enter a last name between 1 and 30 characters long.">
-                        <f:validateLength minimum="1" maximum="30"/>
-                    </h:inputText>
+                    <div class="form-group">
+                        <label for="lastName">Last name</label>
+                        <h:inputText id="lastName"
+                                     value="#{userDetails.user.lastName}"
+                                     size="30"
+                                     required="true"
+                                     requiredMessage="Please enter your last name."
+                                     validatorMessage="Please enter a last name between 1 and 30 characters long.">
+                            <f:validateLength minimum="1" maximum="30"/>
+                        </h:inputText>
+                    </div>
 
-                    <h:outputLabel for="emailAddress">E-mail address</h:outputLabel>
-                    <h:inputText id="emailAddress" 
-                                 value="#{userDetails.user.emailAddress}" 
-                                 size="20"
-                                 required="true" 
-                                 requiredMessage="Please enter your mail address."
-                                 validator="#{userDetails.validateEmail}"/>
+                    <div class="form-group">
+                        <label for="emailAddress">E-mail address</label>
+                        <h:inputText id="emailAddress"
+                                     value="#{userDetails.user.emailAddress}"
+                                     size="20"
+                                     required="true"
+                                     requiredMessage="Please enter your mail address."
+                                     validator="#{userDetails.validateEmail}"/>
+                    </div>
 
-                    <h:outputLabel for="phoneNumber">Phone number</h:outputLabel>
-                    <h:inputText id="phoneNumber" 
-                                 value="#{userDetails.user.phoneNumber}" 
-                                 size="20"
-                                 validator="#{userDetails.validatePhoneNumber}"/>
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone number</label>
+                        <h:inputText id="phoneNumber"
+                                     value="#{userDetails.user.phoneNumber}"
+                                     size="20"
+                                     validator="#{userDetails.validatePhoneNumber}"/>
+                    </div>
 
-                    <h:outputLabel for="birthDate">Birth date</h:outputLabel>
-                    <h:inputText id="birthDate" 
-                    			 p:type="date"
-                    			 required="true"
-                                 requiredMessage="Please select your birthdate."
-                    			 value="#{userDetails.user.birthDate}" 
-                    			 validator="#{userDetails.validateBirthDate}">
-                        <f:convertDateTime pattern="yyyy-MM-dd"/>
-                    </h:inputText>
+                    <div class="form-group">
+                        <label for="birthDate">Birth date</label>
+                        <h:inputText id="birthDate"
+                                     p:type="date"
+                                     required="true"
+                                     requiredMessage="Please select your birthdate."
+                                     value="#{userDetails.user.birthDate}"
+                                     validator="#{userDetails.validateBirthDate}">
+                            <f:convertDateTime pattern="yyyy-MM-dd"/>
+                        </h:inputText>
+                    </div>
 
-                    <h:outputLabel for="subscribedToNewsletter">Subscribe to the newsletter?</h:outputLabel>
-                    <h:selectOneRadio id="subscribedToNewsletter"
-                                      value="#{userDetails.user.subscribedToNewsletter}"
-                                      required="true"
-                                      requiredMessage="Please select if you want to subscribe for the newsletter.">
-                        <f:selectItem itemValue="#{true}" itemLabel="Yes"/>
-                        <f:selectItem itemValue="#{false}" itemLabel="No"/>
-                    </h:selectOneRadio>
+                    <div class="form-group">
+                        <label for="subscribedToNewsletter">Subscribe to the newsletter?</label>
+                        <h:selectOneRadio id="subscribedToNewsletter"
+                                          value="#{userDetails.user.subscribedToNewsletter}"
+                                          required="true"
+                                          requiredMessage="Please select if you want to subscribe for the newsletter.">
+                            <f:selectItem itemValue="#{true}" itemLabel="Yes"/>
+                            <f:selectItem itemValue="#{false}" itemLabel="No"/>
+                        </h:selectOneRadio>
+                    </div>
 
-                    <h:outputText value=""/>
-                    <h:commandButton value="Submit" action="#{userDetails.submit}"/>
-                </h:panelGrid>
+                    <div class="form-group">
+                        <h:commandButton value="Submit" action="#{userDetails.submit}" styleClass="btn" />
+                    </div>
+                </div>
             </h:form>
         </section>
     </ui:define>
